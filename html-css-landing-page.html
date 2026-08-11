@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript Cơ Bản — Bản Đồ Kiến Thức</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#9ac5e5;
+    --teal:#4fb19d;
+    --yellow:#edce7a;
+    --rose:#c98c9a;
+    --pink:#e5c6c3;
+    --ink:#2c2a3a;
+    --ink-soft:#5b5870;
+    --paper:#fbf9f6;
+    --card:#ffffff;
+    --line:#e9e4de;
+    --radius:20px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Baloo 2',sans-serif;}
+  code, .mono, pre{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+
+  /* background texture */
+  .bg-blob{
+    position:fixed; inset:0; z-index:-1; overflow:hidden;
+  }
+  .bg-blob span{
+    position:absolute; border-radius:50%; filter:blur(60px); opacity:.35;
+  }
+  .bg-blob .b1{width:380px;height:380px; background:var(--blue); top:-120px; left:-100px;}
+  .bg-blob .b2{width:340px;height:340px; background:var(--pink); top:20%; right:-140px;}
+  .bg-blob .b3{width:300px;height:300px; background:var(--yellow); bottom:0; left:10%;}
+  .bg-blob .b4{width:280px;height:280px; background:var(--teal); bottom:-100px; right:15%;}
+
+  /* NAV */
+  .nav{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:blur(10px);
+    background:rgba(251,249,246,.85);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1100px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; gap:18px; overflow-x:auto;
+  }
+  .nav-logo{
+    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.15rem;
+    white-space:nowrap; display:flex; align-items:center; gap:8px;
+  }
+  .nav-logo .dot{width:12px;height:12px;border-radius:50%;background:var(--yellow); box-shadow:6px 0 0 var(--blue), 12px 0 0 var(--rose);}
+  .nav-links{display:flex; gap:6px; flex-wrap:nowrap;}
+  .nav-links a{
+    white-space:nowrap; font-size:.82rem; font-weight:600; text-decoration:none;
+    padding:7px 13px; border-radius:100px; color:var(--ink-soft);
+    border:1.5px solid transparent; transition:.2s;
+  }
+  .nav-links a:hover{border-color:var(--line); color:var(--ink); background:#fff;}
+
+  /* HERO */
+  .hero{
+    max-width:1100px; margin:0 auto; padding:64px 24px 40px;
+    display:grid; grid-template-columns:1.15fr .85fr; gap:40px; align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:.75rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--teal); background:#e9f6f2; padding:6px 14px; border-radius:100px;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(2.2rem, 5vw, 3.4rem); line-height:1.08; margin:0 0 18px; font-weight:800;
+  }
+  .hero h1 .accent{color:var(--rose);}
+  .hero p{font-size:1.05rem; color:var(--ink-soft); line-height:1.7; max-width:46ch; margin:0 0 26px;}
+  .hero-tags{display:flex; flex-wrap:wrap; gap:8px;}
+  .tag{
+    font-size:.78rem; font-weight:600; padding:6px 12px; border-radius:100px; color:var(--ink);
+  }
+  .tag.t1{background:var(--blue);} .tag.t2{background:var(--teal); color:#fff;}
+  .tag.t3{background:var(--yellow);} .tag.t4{background:var(--rose); color:#fff;}
+  .tag.t5{background:var(--pink);}
+
+  .hero-code{
+    background:#2c2a3a; border-radius:18px; padding:22px 22px 18px; color:#f4f1ea;
+    box-shadow:0 20px 50px -18px rgba(44,42,58,.5);
+    font-size:.85rem; line-height:1.75; position:relative;
+  }
+  .hero-code .dots{display:flex; gap:6px; margin-bottom:14px;}
+  .hero-code .dots span{width:10px;height:10px;border-radius:50%;}
+  .hero-code .dots span:nth-child(1){background:var(--rose);}
+  .hero-code .dots span:nth-child(2){background:var(--yellow);}
+  .hero-code .dots span:nth-child(3){background:var(--teal);}
+  .hero-code .c-key{color:var(--pink);} .hero-code .c-str{color:var(--yellow);}
+  .hero-code .c-fn{color:var(--blue);} .hero-code .c-com{color:#8f8ba3;}
+
+  section{max-width:1100px; margin:0 auto; padding:70px 24px;}
+  .section-head{max-width:640px; margin:0 auto 40px; text-align:center;}
+  .section-head .kicker{
+    font-size:.75rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft);
+  }
+  .section-head h2{font-size:clamp(1.6rem,3.4vw,2.2rem); margin:8px 0 10px;}
+  .section-head p{color:var(--ink-soft); line-height:1.6; margin:0;}
+
+  /* MIND MAP */
+  .mindmap-wrap{
+    background:var(--card); border:1px solid var(--line); border-radius:28px;
+    padding:38px 20px; overflow:hidden;
+  }
+  .mindmap{position:relative; max-width:920px; margin:0 auto; min-height:560px;}
+  .mm-center{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:150px; height:150px; border-radius:50%;
+    background:linear-gradient(145deg, var(--rose), var(--blue));
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    color:#fff; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:1.05rem;
+    box-shadow:0 18px 40px -14px rgba(201,140,154,.55); z-index:3; padding:8px;
+  }
+  .mm-node{
+    position:absolute; width:190px; padding:14px 16px; border-radius:16px;
+    background:var(--card); border:2px solid var(--line); z-index:2;
+    box-shadow:0 10px 24px -14px rgba(44,42,58,.18);
+    text-decoration:none; color:var(--ink); display:block; transition:.25s;
+  }
+  .mm-node:hover{transform:translateY(-4px); box-shadow:0 16px 28px -14px rgba(44,42,58,.28);}
+  .mm-node .num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%; font-size:.72rem; font-weight:800; color:#fff; margin-bottom:8px;
+  }
+  .mm-node .title{font-family:'Baloo 2',sans-serif; font-weight:700; font-size:.98rem; margin-bottom:4px;}
+  .mm-node .desc{font-size:.75rem; color:var(--ink-soft); line-height:1.4;}
+
+  .mm-node.n1{top:2%; left:2%;} .mm-node.n1 .num{background:var(--blue);}
+  .mm-node.n2{top:0%; right:2%;} .mm-node.n2 .num{background:var(--teal);}
+  .mm-node.n3{top:42%; left:-2%;} .mm-node.n3 .num{background:var(--yellow); color:var(--ink);}
+  .mm-node.n4{top:42%; right:-2%;} .mm-node.n4 .num{background:var(--rose);}
+  .mm-node.n5{bottom:0%; left:8%;} .mm-node.n5 .num{background:var(--pink); color:var(--ink);}
+  .mm-node.n6{bottom:0%; right:8%;} .mm-node.n6 .num{background:var(--blue);}
+
+  .mindmap svg{position:absolute; inset:0; width:100%; height:100%; z-index:1;}
+
+  @media(max-width:820px){
+    .mindmap{min-height:auto;}
+    .mindmap svg{display:none;}
+    .mm-center{position:static; transform:none; margin:0 auto 20px;}
+    .mm-node{position:static; width:auto; margin-bottom:12px;}
+    .hero{grid-template-columns:1fr;}
+  }
+
+  /* TOPIC SECTIONS */
+  .topic{
+    border-radius:28px; border:1px solid var(--line); background:var(--card);
+    padding:36px clamp(18px,4vw,44px); margin-bottom:26px; scroll-margin-top:90px;
+  }
+  .topic-head{display:flex; align-items:center; gap:14px; margin-bottom:22px;}
+  .topic-num{
+    width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center;
+    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:1.15rem; color:#fff; flex-shrink:0;
+  }
+  .topic-head h3{margin:0; font-size:1.4rem;}
+  .topic-head .sub{font-size:.85rem; color:var(--ink-soft); margin-top:2px;}
+
+  .topic.c-blue .topic-num{background:var(--blue);}
+  .topic.c-teal .topic-num{background:var(--teal);}
+  .topic.c-yellow .topic-num{background:var(--yellow); color:var(--ink);}
+  .topic.c-rose .topic-num{background:var(--rose);}
+  .topic.c-pink .topic-num{background:var(--pink); color:var(--ink);}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr;}}
+
+  .info-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:16px 18px;
+  }
+  .info-card h4{margin:0 0 8px; font-size:.95rem; font-family:'Baloo 2',sans-serif;}
+  .info-card p, .info-card li{font-size:.88rem; color:var(--ink-soft); line-height:1.6; margin:0 0 6px;}
+  .info-card ul{margin:0; padding-left:18px;}
+
+  .pill-row{display:flex; flex-wrap:wrap; gap:8px; margin:14px 0;}
+  .pill{font-size:.78rem; font-weight:600; padding:5px 12px; border-radius:100px; border:1.5px solid var(--line); background:#fff;}
+
+  pre.code{
+    background:#2c2a3a; color:#f4f1ea; border-radius:14px; padding:16px 18px;
+    font-size:.82rem; line-height:1.7; overflow-x:auto; margin:10px 0;
+  }
+  pre.code .c-key{color:var(--pink);} pre.code .c-str{color:var(--yellow);}
+  pre.code .c-fn{color:var(--blue);} pre.code .c-com{color:#8f8ba3;} pre.code .c-num{color:var(--teal);}
+
+  .example-box{
+    border-left:4px solid var(--teal); background:#effaf7; border-radius:0 14px 14px 0;
+    padding:12px 16px; margin-top:12px; font-size:.85rem; color:#1f4d43;
+  }
+  .example-box b{color:#0e352c;}
+
+  table.spec{width:100%; border-collapse:collapse; font-size:.85rem; margin:14px 0;}
+  table.spec th{
+    text-align:left; padding:9px 12px; background:var(--paper); font-family:'Baloo 2',sans-serif; font-size:.82rem;
+    border-bottom:2px solid var(--line);
+  }
+  table.spec td{padding:9px 12px; border-bottom:1px solid var(--line); color:var(--ink-soft); vertical-align:top;}
+  table.spec tr:last-child td{border-bottom:none;}
+  table.spec code{background:#f1ede6; padding:1px 6px; border-radius:6px; font-size:.8rem; color:var(--ink);}
+
+  .method-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:14px; margin-top:16px;}
+  .method-card{border:1px solid var(--line); border-radius:14px; padding:14px; background:var(--paper);}
+  .method-card .m-name{font-family:'JetBrains Mono',monospace; font-weight:600; font-size:.88rem; color:var(--rose); margin-bottom:6px;}
+  .method-card p{font-size:.82rem; color:var(--ink-soft); margin:0 0 8px; line-height:1.5;}
+  .method-card pre.ex, .method-card code.ex{
+    display:block; font-family:'JetBrains Mono',monospace; font-size:.74rem; line-height:1.6;
+    background:#2c2a3a; color:#f4f1ea; padding:10px 12px; border-radius:8px;
+    margin:0; overflow-x:auto; white-space:pre;
+  }
+  .method-card pre.ex .c-com{color:#8f8ba3;}
+
+  footer{
+    max-width:1100px; margin:0 auto; padding:50px 24px 80px; text-align:center;
+  }
+  footer .foot-card{
+    background:linear-gradient(120deg, var(--blue), var(--pink)); border-radius:24px; padding:44px 24px; color:#2c2a3a;
+  }
+  footer h3{margin:0 0 10px; font-size:1.5rem;}
+  footer p{margin:0; color:#3a3750; max-width:52ch; margin:0 auto; line-height:1.6;}
+
+  .back-top{
+    position:fixed; bottom:24px; right:24px; width:46px; height:46px; border-radius:50%;
+    background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center;
+    text-decoration:none; font-size:1.1rem; box-shadow:0 10px 24px -10px rgba(0,0,0,.4); z-index:40;
+    opacity:0; pointer-events:none; transition:.3s;
+  }
+  .back-top.show{opacity:1; pointer-events:auto;}
+
+  /* CROSS-LINK SWITCH BUTTON */
+  .switch-btn{
+    display:flex; align-items:center; gap:8px; white-space:nowrap;
+    font-size:.8rem; font-weight:700; text-decoration:none; color:#fff;
+    background:linear-gradient(120deg, var(--rose), var(--blue));
+    padding:9px 16px; border-radius:100px; flex-shrink:0;
+    box-shadow:0 8px 18px -8px rgba(201,140,154,.6); transition:.2s;
+  }
+  .switch-btn:hover{transform:translateY(-2px); box-shadow:0 12px 22px -8px rgba(201,140,154,.7);}
+  .switch-btn .arrow{transition:.2s;}
+  .switch-btn:hover .arrow{transform:translateX(3px);}
+
+  .hero-switch{
+    display:inline-flex; align-items:center; gap:10px; text-decoration:none;
+    background:var(--card); border:1.5px solid var(--line); border-radius:100px;
+    padding:8px 8px 8px 18px; margin-top:28px; color:var(--ink); font-size:.85rem; font-weight:600;
+    box-shadow:0 10px 24px -16px rgba(44,42,58,.35); transition:.2s;
+  }
+  .hero-switch:hover{border-color:var(--rose); transform:translateY(-2px);}
+  .hero-switch .go{
+    width:30px; height:30px; border-radius:50%; background:linear-gradient(120deg, var(--rose), var(--blue));
+    color:#fff; display:flex; align-items:center; justify-content:center; font-size:.9rem;
+  }
+
+  /* 3-WAY LESSON SWITCHER */
+  .lesson-switcher{
+    display:flex; align-items:center; gap:4px; background:#fff; border:1.5px solid var(--line);
+    border-radius:100px; padding:4px; flex-shrink:0;
+  }
+  .lesson-switcher a, .lesson-switcher span{
+    font-size:.74rem; font-weight:700; padding:6px 12px; border-radius:100px; text-decoration:none;
+    color:var(--ink-soft); white-space:nowrap; transition:.2s;
+  }
+  .lesson-switcher a:hover{background:var(--paper); color:var(--ink);}
+  .lesson-switcher .current{background:var(--ink); color:#fff;}
+</style>
+</head>
+<body>
+
+<div class="bg-blob"><span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo"><span class="dot"></span> HTML &amp; CSS</div>
+    <div class="nav-links">
+      <a href="#mindmap">Bản đồ</a>
+      <a href="#html-co-ban">HTML cơ bản</a>
+      <a href="#html-nangcao">HTML nâng cao</a>
+      <a href="#css-nhapmon">CSS nhập môn</a>
+      <a href="#box-model">Box Model</a>
+      <a href="#layout">Layout</a>
+      <a href="#typo">Typography</a>
+    </div>
+    <div class="lesson-switcher">
+      <a href="js-landing-page.html">JS</a>
+      <span class="current">HTML/CSS</span>
+      <a href="upweb-landing-page.html">Up Web</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div>
+    <span class="eyebrow">📗 Bài 7-8 · Tóm tắt & ghi nhớ</span>
+    <h1>Xây nhà với <span class="accent">HTML</span> &amp; sơn tường với <span class="accent" style="color:var(--teal);">CSS</span></h1>
+    <p>Tổng hợp toàn bộ kiến thức nền tảng: cấu trúc HTML, thẻ ngữ nghĩa, form, đến 3 cách nhúng CSS, box model, layout (Float/Flexbox/Grid) và hiệu ứng — kèm ví dụ dễ hiểu để ôn nhanh, nhớ lâu.</p>
+    <div class="hero-tags">
+      <span class="tag t1">Thẻ &amp; cấu trúc</span>
+      <span class="tag t2">Form &amp; Semantic</span>
+      <span class="tag t3">Selector &amp; màu sắc</span>
+      <span class="tag t4">Box Model</span>
+      <span class="tag t5">Flexbox &amp; Grid</span>
+    </div>
+    <a href="js-landing-page.html" class="hero-switch">
+      <span class="go">→</span> Đã xong HTML/CSS? Ôn tiếp bài JavaScript
+    </a>
+  </div>
+  <div class="hero-code">
+    <div class="dots"><span></span><span></span><span></span></div>
+<pre style="margin:0; white-space:pre-wrap;"><span class="c-com">&lt;!-- Một đoạn, đủ mọi khái niệm --&gt;</span>
+<span class="c-key">&lt;div</span> <span class="c-fn">class</span>=<span class="c-str">"card"</span><span class="c-key">&gt;</span>
+  <span class="c-key">&lt;h2&gt;</span>Xin chào 👋<span class="c-key">&lt;/h2&gt;</span>
+  <span class="c-key">&lt;p&gt;</span>HTML + CSS = giao diện<span class="c-key">&lt;/p&gt;</span>
+<span class="c-key">&lt;/div&gt;</span>
+
+<span class="c-com">/* style.css */</span>
+<span class="c-fn">.card</span> {
+  <span class="c-str">display</span>: flex;
+  <span class="c-str">padding</span>: <span class="c-fn">16px</span>;
+  <span class="c-str">border-radius</span>: <span class="c-fn">12px</span>;
+}</pre>
+  </div>
+</div>
+
+<section id="mindmap">
+  <div class="section-head">
+    <span class="kicker">Mind map</span>
+    <h2>Toàn cảnh bài học trong 1 bức tranh</h2>
+    <p>6 nhánh kiến thức chính — bấm vào từng nhánh để đọc chi tiết bên dưới.</p>
+  </div>
+
+  <div class="mindmap-wrap">
+    <div class="mindmap">
+      <svg viewBox="0 0 920 560" preserveAspectRatio="none">
+        <line x1="460" y1="280" x2="180" y2="90"  stroke="#9ac5e5" stroke-width="2.5" stroke-dasharray="5 5"/>
+        <line x1="460" y1="280" x2="740" y2="70"  stroke="#4fb19d" stroke-width="2.5" stroke-dasharray="5 5"/>
+        <line x1="460" y1="280" x2="120" y2="300" stroke="#edce7a" stroke-width="2.5" stroke-dasharray="5 5"/>
+        <line x1="460" y1="280" x2="800" y2="300" stroke="#c98c9a" stroke-width="2.5" stroke-dasharray="5 5"/>
+        <line x1="460" y1="280" x2="230" y2="500" stroke="#e5c6c3" stroke-width="2.5" stroke-dasharray="5 5"/>
+        <line x1="460" y1="280" x2="700" y2="500" stroke="#9ac5e5" stroke-width="2.5" stroke-dasharray="5 5"/>
+      </svg>
+
+      <div class="mm-center">HTML &amp; CSS<br><span style="font-weight:400;font-size:.72rem;opacity:.9;">Bộ khung &amp; giao diện web</span></div>
+
+      <a href="#html-co-ban" class="mm-node n1">
+        <span class="num">1</span>
+        <div class="title">HTML cơ bản</div>
+        <div class="desc">Thẻ, danh sách, bảng, block/inline</div>
+      </a>
+      <a href="#html-nangcao" class="mm-node n2">
+        <span class="num">2</span>
+        <div class="title">HTML nâng cao</div>
+        <div class="desc">Semantic, form, iframe, id/class</div>
+      </a>
+      <a href="#css-nhapmon" class="mm-node n3">
+        <span class="num">3</span>
+        <div class="title">CSS nhập môn</div>
+        <div class="desc">Nhúng CSS, selector, màu, specificity</div>
+      </a>
+      <a href="#box-model" class="mm-node n4">
+        <span class="num">4</span>
+        <div class="title">Box Model</div>
+        <div class="desc">Border, margin, padding, box-sizing</div>
+      </a>
+      <a href="#layout" class="mm-node n5">
+        <span class="num">5</span>
+        <div class="title">Layout</div>
+        <div class="desc">Float, Flexbox, Grid, position</div>
+      </a>
+      <a href="#typo" class="mm-node n6">
+        <span class="num">6</span>
+        <div class="title">Typography &amp; Hiệu ứng</div>
+        <div class="desc">Font, text, pseudo, navbar, transition</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="chi-tiet" style="padding-top:10px;">
+
+  <!-- 1. HTML CO BAN -->
+  <div class="topic c-blue" id="html-co-ban">
+    <div class="topic-head">
+      <div class="topic-num">1</div>
+      <div>
+        <h3>HTML cơ bản</h3>
+        <div class="sub">Ngôn ngữ đánh dấu siêu văn bản — dùng thẻ (tag) để đánh dấu tài liệu</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="info-card">
+        <h4>Cấu trúc tài liệu HTML</h4>
+        <ul>
+          <li><code>&lt;!DOCTYPE html&gt;</code> — định nghĩa đây là HTML5</li>
+          <li><code>&lt;html&gt;</code> — phần tử root (gốc) của trang</li>
+          <li><code>&lt;head&gt;</code> — chứa thông tin meta, không hiển thị</li>
+          <li><code>&lt;title&gt;</code> — tiêu đề tab trình duyệt</li>
+          <li><code>&lt;body&gt;</code> — chứa toàn bộ nội dung hiển thị</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>Cấu tạo 1 thẻ</h4>
+        <p>Mỗi thẻ thường có <b>3 phần</b>: thẻ mở, nội dung, thẻ đóng.</p>
+        <pre class="code" style="margin:0;">&lt;p&gt;Nội dung&lt;/p&gt;
+<span class="c-com">↑mở   ↑nội dung ↑đóng</span></pre>
+        <p>Thẻ tự đóng (không cần thẻ đóng): <code>&lt;br&gt;</code>, <code>&lt;img src="x.gif"&gt;</code>, <code>&lt;hr&gt;</code>...</p>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <b>Ví dụ dễ hiểu:</b> nếu trang web là 1 căn nhà, <code>&lt;!DOCTYPE html&gt;</code> là giấy phép xây dựng, <code>&lt;html&gt;</code> là toàn bộ khu đất, <code>&lt;head&gt;</code> là bản vẽ kỹ thuật (không ai nhìn thấy khi ở trong nhà), còn <code>&lt;body&gt;</code> mới là căn nhà thật mà khách ghé thăm nhìn thấy.
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:24px;">Danh sách (List)</h4>
+    <table class="spec">
+      <tr><th>Thẻ</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>&lt;ol&gt;</code></td><td>Ordered list — danh sách có thứ tự (1,2,3...)</td></tr>
+      <tr><td><code>&lt;ul&gt;</code></td><td>Unordered list — danh sách không thứ tự (dấu chấm •)</td></tr>
+      <tr><td><code>&lt;li&gt;</code></td><td>List item — mỗi mục trong danh sách (phần tử con của ol/ul)</td></tr>
+      <tr><td><code>&lt;dl&gt;&lt;dt&gt;&lt;dd&gt;</code></td><td>Danh sách mô tả: <code>dl</code> định nghĩa, <code>dt</code> tên thuật ngữ, <code>dd</code> mô tả</td></tr>
+    </table>
+
+    <pre class="code"><span class="c-key">&lt;ul&gt;</span>
+  <span class="c-key">&lt;li&gt;</span>Táo<span class="c-key">&lt;/li&gt;</span>
+  <span class="c-key">&lt;li&gt;</span>Chuối<span class="c-key">&lt;/li&gt;</span>
+<span class="c-key">&lt;/ul&gt;</span>
+<span class="c-com">&lt;!-- hiển thị: • Táo  • Chuối --&gt;</span></pre>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:24px;">Bảng (Table)</h4>
+    <table class="spec">
+      <tr><th>Thẻ</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>&lt;table&gt;</code></td><td>Xác định 1 bảng</td></tr>
+      <tr><td><code>&lt;tr&gt;</code></td><td>Table row — 1 hàng trong bảng</td></tr>
+      <tr><td><code>&lt;th&gt;</code></td><td>Table header — 1 tiêu đề cột/hàng (chữ đậm, căn giữa)</td></tr>
+      <tr><td><code>&lt;td&gt;</code></td><td>Table data — 1 ô dữ liệu trong bảng</td></tr>
+      <tr><td><code>&lt;caption&gt;</code></td><td>Chú thích cho bảng</td></tr>
+      <tr><td><code>&lt;thead&gt;&lt;tbody&gt;&lt;tfoot&gt;</code></td><td>Nhóm nội dung tiêu đề / thân / chân trang bảng</td></tr>
+    </table>
+
+    <div class="example-box">
+      <b>Ví dụ dễ hiểu:</b> <code>&lt;table&gt;</code> là cả bảng, <code>&lt;tr&gt;</code> là 1 hàng ngang, <code>&lt;th&gt;</code>/<code>&lt;td&gt;</code> là từng ô — giống hệt cách bạn đọc 1 bảng Excel: hàng trước, rồi mới đến từng ô trong hàng đó.
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:24px;">Phần tử mức khối (Block) vs nội tuyến (Inline)</h4>
+    <div class="grid2">
+      <div class="info-card">
+        <h4>🟦 Block (cấp khối)</h4>
+        <p>Luôn bắt đầu trên 1 dòng mới, chiếm toàn bộ chiều rộng có sẵn. Có thể đặt width/height, margin, padding theo mọi hướng.</p>
+        <p>Ví dụ: <code>&lt;p&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;h1&gt;</code></p>
+      </div>
+      <div class="info-card">
+        <h4>🟩 Inline (nội tuyến)</h4>
+        <p>Không bắt đầu dòng mới, chỉ chiếm đủ chiều rộng cần thiết. Không đặt được width/height, margin/padding dọc.</p>
+        <p>Ví dụ: <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;strong&gt;</code></p>
+      </div>
+    </div>
+    <div class="pill-row">
+      <span class="pill">💡 &lt;div&gt; = thùng chứa cấp khối, dùng làm vùng bọc cho các phần tử khác</span>
+      <span class="pill">💡 &lt;span&gt; = phần tử nội tuyến, dùng đánh dấu 1 đoạn văn bản nhỏ</span>
+    </div>
+  </div>
+
+  <!-- 2. HTML NANG CAO -->
+  <div class="topic c-teal" id="html-nangcao">
+    <div class="topic-head">
+      <div class="topic-num">2</div>
+      <div>
+        <h3>HTML nâng cao</h3>
+        <div class="sub">Semantic HTML, Form, liên kết, iframe và các thuộc tính quan trọng</div>
+      </div>
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif;">Semantic HTML (HTML ngữ nghĩa)</h4>
+    <p style="color:var(--ink-soft); font-size:.9rem;">Các thẻ mô tả rõ ràng ý nghĩa nội dung cho cả trình duyệt lẫn người đọc code — thay vì chỉ dùng <code>&lt;div&gt;</code> chung chung.</p>
+    <table class="spec">
+      <tr><th>Thẻ</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>&lt;header&gt;</code></td><td>Đại diện cho phần tiêu đề, đầu trang (logo, menu điều hướng chính)</td></tr>
+      <tr><td><code>&lt;nav&gt;</code></td><td>1 tập hợp các liên kết điều hướng chính</td></tr>
+      <tr><td><code>&lt;section&gt;</code></td><td>1 phần/khu vực nội dung của trang (chương, mục tin tức...)</td></tr>
+      <tr><td><code>&lt;article&gt;</code></td><td>Nội dung độc lập, có thể tồn tại/phân phối riêng biệt (bài blog, tin tức)</td></tr>
+      <tr><td><code>&lt;aside&gt;</code></td><td>Nội dung phụ, liên quan gián tiếp đến nội dung xung quanh (thanh bên)</td></tr>
+      <tr><td><code>&lt;footer&gt;</code></td><td>Phần chân trang: bản quyền, liên hệ, sitemap, tài liệu liên quan</td></tr>
+      <tr><td><code>&lt;figure&gt;&lt;figcaption&gt;</code></td><td>Nội dung minh họa độc lập (ảnh, sơ đồ) và chú thích cho nó</td></tr>
+      <tr><td><code>&lt;main&gt;</code></td><td>Nội dung chính của tài liệu</td></tr>
+      <tr><td><code>&lt;time&gt;</code></td><td>Xác định ngày / giờ</td></tr>
+    </table>
+
+    <div class="example-box">
+      <b>Lưu ý:</b> có thể lồng <code>&lt;article&gt;</code> trong <code>&lt;section&gt;</code> hoặc ngược lại — không bắt buộc theo 1 chiều. Một trang có thể có nhiều <code>&lt;header&gt;</code>: 1 cho cả trang, và các <code>&lt;article&gt;</code>/<code>&lt;footer&gt;</code> khác cũng có thể có <code>&lt;header&gt;</code> riêng.
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:26px;">Bố cục trang HTML điển hình</h4>
+    <pre class="code"><span class="c-key">&lt;body&gt;</span>
+  <span class="c-key">&lt;header&gt;</span>...<span class="c-key">&lt;/header&gt;</span>
+  <span class="c-key">&lt;nav&gt;</span>...<span class="c-key">&lt;/nav&gt;</span>
+  <span class="c-key">&lt;section&gt;</span>
+    <span class="c-key">&lt;article&gt;</span>Nội dung bài viết<span class="c-key">&lt;/article&gt;</span>
+    <span class="c-key">&lt;aside&gt;</span>Thanh bên<span class="c-key">&lt;/aside&gt;</span>
+  <span class="c-key">&lt;/section&gt;</span>
+  <span class="c-key">&lt;footer&gt;</span>...<span class="c-key">&lt;/footer&gt;</span>
+<span class="c-key">&lt;/body&gt;</span></pre>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:26px;">Thuộc tính class &amp; id</h4>
+    <div class="grid2">
+      <div class="info-card">
+        <h4>class</h4>
+        <p>Xét kiểu cách giống nhau cho <b>nhiều</b> phần tử có cùng tên class. Trong CSS gọi bằng dấu chấm: <code>.class {}</code></p>
+        <pre class="code" style="margin:0;">&lt;h1 class=<span class="c-str">"class1 class2"</span>&gt;</pre>
+      </div>
+      <div class="info-card">
+        <h4>id</h4>
+        <p>Chỉ định <b>1 id duy nhất</b> cho 1 phần tử — không được trùng trong cùng 1 trang. Trong CSS gọi bằng dấu #: <code>#id {}</code></p>
+        <pre class="code" style="margin:0;">&lt;div id=<span class="c-str">"header"</span>&gt;</pre>
+      </div>
+    </div>
+    <div class="pill-row">
+      <span class="pill">⚠️ id chỉ dùng 1 lần / trang · class dùng lại được cho nhiều phần tử</span>
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:26px;">Liên kết (Hyperlink) &amp; thuộc tính target</h4>
+    <pre class="code">&lt;a href=<span class="c-str">"https://..."</span> target=<span class="c-str">"_blank"</span>&gt;Nội dung liên kết&lt;/a&gt;</pre>
+    <table class="spec">
+      <tr><th>Giá trị target</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>_self</code></td><td>Mặc định — mở tại cùng cửa sổ/tab</td></tr>
+      <tr><td><code>_blank</code></td><td>Mở tài liệu trong cửa sổ/tab mới</td></tr>
+      <tr><td><code>_parent</code></td><td>Mở trong parent frame</td></tr>
+      <tr><td><code>_top</code></td><td>Mở trong toàn bộ nội dung của cửa sổ</td></tr>
+    </table>
+    <div class="pill-row">
+      <span class="pill">🔗 Chưa truy cập: gạch chân + xanh lam</span>
+      <span class="pill">🔗 Đã truy cập: gạch chân + màu tím</span>
+      <span class="pill">🔗 Đang active: gạch chân + màu đỏ</span>
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:26px;">Form — thu thập dữ liệu người dùng</h4>
+    <p style="color:var(--ink-soft); font-size:.9rem;">Ví dụ: form đăng nhập, đăng ký, liên hệ...</p>
+    <div class="grid2">
+      <div class="info-card">
+        <h4>Các thẻ cơ bản trong &lt;form&gt;</h4>
+        <ul>
+          <li><code>&lt;input&gt;</code> — ô nhập liệu (text, radio, submit, email...)</li>
+          <li><code>&lt;label&gt;</code> — nhãn cho 1 phần tử nhập liệu, thuộc tính <code>for</code> phải khớp với <code>id</code> của input</li>
+          <li><code>&lt;select&gt;&lt;option&gt;</code> — chỉ định 1 dropdown list</li>
+          <li><code>&lt;textarea&gt;</code> — ô nhập nhiều dòng</li>
+          <li><code>&lt;button&gt;</code>, <code>&lt;fieldset&gt;</code>, <code>&lt;legend&gt;</code>, <code>&lt;datalist&gt;</code></li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>Thuộc tính quan trọng</h4>
+        <ul>
+          <li><code>action</code> — xác định nơi dữ liệu form được gửi tới</li>
+          <li><code>method="get|post"</code> — phương thức HTTP gửi dữ liệu</li>
+          <li><code>name</code> — bắt buộc để dữ liệu input được submit</li>
+          <li><code>autocomplete="on|off"</code>, <code>novalidate</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <pre class="code">&lt;label for=<span class="c-str">"email"</span>&gt;Email:&lt;/label&gt;
+&lt;input type=<span class="c-str">"email"</span> id=<span class="c-str">"email"</span> name=<span class="c-str">"email"</span>&gt;
+&lt;input type=<span class="c-str">"submit"</span> value=<span class="c-str">"Gửi"</span>&gt;</pre>
+
+    <div class="example-box">
+      <b>GET vs POST — khi nào dùng gì?</b> <code>GET</code> gửi dữ liệu hiển thị ngay trên URL, phù hợp cho tìm kiếm/lọc dữ liệu, không nên dùng khi có thông tin nhạy cảm. <code>POST</code> không hiển thị dữ liệu trên URL, dùng khi gửi thông tin cá nhân/nhạy cảm như mật khẩu.
+    </div>
+
+    <div class="pill-row">
+      <span class="pill">💡 &lt;iframe src="url"&gt;&lt;/iframe&gt; — nhúng 1 trang web khác vào trang hiện tại</span>
+      <span class="pill">💡 target của link phải trùng với thuộc tính name của iframe muốn mở vào</span>
+    </div>
+  </div>
+
+  <!-- 3. CSS NHAP MON -->
+  <div class="topic c-yellow" id="css-nhapmon">
+    <div class="topic-head">
+      <div class="topic-num">3</div>
+      <div>
+        <h3>CSS nhập môn</h3>
+        <div class="sub">Cascading Style Sheets — ngôn ngữ định dạng lại các phần tử HTML</div>
+      </div>
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif;">3 cách nhúng CSS</h4>
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="m-name">1. Inline CSS</div>
+        <p>Viết trực tiếp trên chính thẻ HTML qua thuộc tính <code>style</code>. Khó quản lý khi dự án lớn.</p>
+        <pre class="ex">&lt;h1 style="color:red; font-size:20px"&gt;
+  Hello CSS
+&lt;/h1&gt;</pre>
+      </div>
+      <div class="method-card">
+        <div class="m-name">2. Internal CSS</div>
+        <p>Viết trong thẻ <code>&lt;style&gt;</code> bên trong <code>&lt;head&gt;</code> của trang HTML.</p>
+        <pre class="ex">&lt;head&gt;
+  &lt;style&gt;
+    h1 { color:red; }
+  &lt;/style&gt;
+&lt;/head&gt;</pre>
+      </div>
+      <div class="method-card">
+        <div class="m-name">3. External CSS ⭐</div>
+        <p>Tách CSS ra 1 file <code>.css</code> riêng — cách <b>phổ biến nhất</b>, dễ bảo trì.</p>
+        <pre class="ex">&lt;head&gt;
+  &lt;link rel="stylesheet"
+    href="mystyle.css"&gt;
+&lt;/head&gt;</pre>
+      </div>
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:26px;">Cấu trúc 1 rule CSS</h4>
+    <pre class="code">selector {
+  thuộc-tính: giá-trị;  <span class="c-com">/* declaration / khai báo */</span>
+}
+<span class="c-com">/* ví dụ: */</span>
+h1 {
+  color: blue;
+  font-size: 20px;
+}</pre>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:22px;">Bộ chọn (Selector) cơ bản</h4>
+    <table class="spec">
+      <tr><th>Loại</th><th>Cú pháp</th><th>Ý nghĩa</th></tr>
+      <tr><td>ID</td><td><code>#id</code></td><td>Chọn phần tử có <code>id="firstname"</code> → <code>#firstname</code></td></tr>
+      <tr><td>Class</td><td><code>.class</code></td><td>Chọn phần tử có <code>class="intro"</code> → <code>.intro</code></td></tr>
+      <tr><td>Element</td><td><code>tag</code></td><td>Chọn tất cả phần tử <code>&lt;p&gt;</code> → <code>p</code></td></tr>
+      <tr><td>Element.class</td><td><code>tag.class</code></td><td>Chỉ chọn <code>&lt;p&gt;</code> có <code>class="intro"</code> → <code>p.intro</code></td></tr>
+      <tr><td>Nhóm</td><td><code>a, b</code></td><td>Chọn nhiều loại phần tử cùng lúc → <code>div, p</code></td></tr>
+    </table>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:22px;">Combinator (tổ hợp bộ chọn)</h4>
+    <table class="spec">
+      <tr><th>Tên</th><th>Ký hiệu</th><th>Ý nghĩa</th></tr>
+      <tr><td>Descendant</td><td><code>div p</code></td><td>Chọn mọi &lt;p&gt; nằm bên trong &lt;div&gt; (mọi cấp)</td></tr>
+      <tr><td>Child</td><td><code>div &gt; p</code></td><td>Chỉ chọn &lt;p&gt; là con trực tiếp của &lt;div&gt;</td></tr>
+      <tr><td>Adjacent sibling</td><td><code>div + p</code></td><td>Chọn &lt;p&gt; đứng ngay sau &lt;div&gt;, cùng cấp cha</td></tr>
+      <tr><td>General sibling</td><td><code>div ~ p</code></td><td>Chọn mọi &lt;p&gt; là anh em (cùng cấp cha) đứng sau &lt;div&gt;</td></tr>
+    </table>
+
+    <div class="example-box">
+      <b>Ví dụ dễ hiểu:</b> nếu HTML là 1 cây gia phả, <code>div p</code> là "mọi con cháu", <code>div &gt; p</code> chỉ là "con ruột", <code>div + p</code> là "em kế liền sau", còn <code>div ~ p</code> là "tất cả các em sinh sau" (không nhất thiết liền kề).
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:22px;">CSS với màu sắc</h4>
+    <table class="spec">
+      <tr><th>Loại</th><th>Cú pháp</th><th>Ghi chú</th></tr>
+      <tr><td>RGB</td><td><code>rgb(255,0,0)</code></td><td>Đỏ, lục, lam — mỗi giá trị 0-255</td></tr>
+      <tr><td>RGBA</td><td><code>rgba(255,0,0,.5)</code></td><td>Thêm alpha (độ mờ) 0-1</td></tr>
+      <tr><td>HEX</td><td><code>#rrggbb</code></td><td>Mã thập lục phân, cao nhất FF, thấp nhất 00 — dùng nhiều nhất</td></tr>
+      <tr><td>HSL</td><td><code>hsl(0,100%,50%)</code></td><td>Hue (màu sắc), Saturation (độ bão hoà), Lightness (độ sáng)</td></tr>
+      <tr><td>HSLA</td><td><code>hsla(0,100%,50%,.5)</code></td><td>Thêm alpha — độ trong suốt</td></tr>
+    </table>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:26px;">⭐ Thứ tự ưu tiên (Specificity) &amp; tính kế thừa</h4>
+    <table class="spec">
+      <tr><th>Loại rule</th><th>Thứ tự ưu tiên</th><th>Phạm vi tác động</th></tr>
+      <tr><td>inline (style="")</td><td>1 (cao nhất)</td><td>Hẹp nhất — chỉ 1 phần tử</td></tr>
+      <tr><td>id (#id)</td><td>2</td><td>Hẹp</td></tr>
+      <tr><td>class (.class)</td><td>3</td><td>Rộng</td></tr>
+      <tr><td>tag (element)</td><td>4 (thấp nhất)</td><td>Rộng nhất</td></tr>
+    </table>
+    <div class="pill-row">
+      <span class="pill">💡 Cùng cấp độ ưu tiên → rule viết sau cùng sẽ thắng</span>
+      <span class="pill">💡 Ghi đè mạnh nhất: <code>color: pink !important;</code></span>
+      <span class="pill">💡 Thuộc tính kế thừa (như <code>color</code>) đặt ở cha sẽ tự áp cho con</span>
+    </div>
+
+    <div class="example-box">
+      <b>Ví dụ dễ hiểu:</b> specificity giống như "chức vụ" trong công ty ra quyết định — <code>inline</code> là giám đốc, <code>id</code> là trưởng phòng, <code>class</code> là nhân viên, <code>tag</code> là thực tập sinh. Chức vụ cao hơn luôn thắng, bất kể ai "nói" (viết code) trước hay sau.
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:22px;">Pseudo-classes (lớp giả) thường dùng</h4>
+    <table class="spec">
+      <tr><th>Bộ chọn</th><th>Mô tả</th></tr>
+      <tr><td><code>:hover</code></td><td>Khi di chuột vào phần tử</td></tr>
+      <tr><td><code>:active</code></td><td>Khi phần tử đang được click</td></tr>
+      <tr><td><code>:link</code> / <code>:visited</code></td><td>Link chưa/đã từng được truy cập</td></tr>
+      <tr><td><code>:first-child</code> / <code>:last-child</code></td><td>Phần tử con đầu tiên / cuối cùng trong phần tử cha</td></tr>
+      <tr><td><code>:nth-child(n)</code></td><td>Phần tử con thứ n (có thể dùng odd/even)</td></tr>
+      <tr><td><code>:checked</code> / <code>:disabled</code></td><td>Trạng thái của input (đã tick / bị vô hiệu hoá)</td></tr>
+    </table>
+    <div class="pill-row">
+      <span class="pill">⚠️ Quy tắc thứ tự bắt buộc: :link → :visited → :hover → :active (nhớ "LVHA")</span>
+    </div>
+  </div>
+
+  <!-- 4. BOX MODEL -->
+  <div class="topic c-rose" id="box-model">
+    <div class="topic-head">
+      <div class="topic-num">4</div>
+      <div>
+        <h3>Box Model (Mô hình hộp)</h3>
+        <div class="sub">Mọi phần tử HTML đều là 1 chiếc hộp gồm 4 lớp: Content → Padding → Border → Margin</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="info-card">
+        <h4>4 lớp của Box Model</h4>
+        <ul>
+          <li><b>Content</b> — nội dung thật (chữ, ảnh...)</li>
+          <li><b>Padding</b> — khoảng đệm giữa content và border, thuộc bên trong phần tử</li>
+          <li><b>Border</b> — viền bao quanh padding + content</li>
+          <li><b>Margin</b> — khoảng cách ra bên ngoài, giữa phần tử này với phần tử khác</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>box-sizing</h4>
+        <p><code>content-box</code> (mặc định): width/height chỉ tính content — padding/border cộng thêm ra ngoài, làm kích thước thực tế lớn hơn số khai báo.</p>
+        <p><code>border-box</code>: width/height đã bao gồm cả padding + border — kích thước tổng luôn đúng số bạn set.</p>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <b>Ví dụ dễ hiểu:</b> box model giống 1 hộp quà: <b>content</b> là món quà, <b>padding</b> là lớp xốp chèn quanh quà, <b>border</b> là vỏ hộp cứng, <b>margin</b> là khoảng trống bạn để lại quanh hộp khi xếp nhiều hộp cạnh nhau lên kệ.
+    </div>
+
+    <pre class="code">* { box-sizing: border-box; }
+<span class="c-com">/* đặt ở đầu file CSS, dùng * vì box-sizing không tự inherit xuống con
+   như color hay font-size */</span></pre>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:24px;">Công thức tính kích thước thực tế</h4>
+    <pre class="code">Tổng <span class="c-fn">width</span>  = width  + padding-trái + padding-phải + border-trái + border-phải
+Tổng <span class="c-fn">height</span> = height + padding-trên + padding-dưới + border-trên + border-dưới
+
+<span class="c-com">// Ví dụ: width:320px; padding:10px; border:5px solid gray;</span>
+<span class="c-com">// Tổng width = 320 + (10+10) + (5+5) = 350px</span></pre>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:24px;">Border</h4>
+    <table class="spec">
+      <tr><th>Thuộc tính</th><th>Giá trị / ý nghĩa</th></tr>
+      <tr><td><code>border-style</code></td><td><code>solid</code> (liền), <code>dashed</code> (nét đứt), <code>dotted</code> (chấm), <code>double</code> (viền kép), <code>none</code></td></tr>
+      <tr><td><code>border-width</code></td><td>Độ rộng viền</td></tr>
+      <tr><td><code>border-color</code></td><td>Màu viền</td></tr>
+      <tr><td><code>border-radius</code></td><td>Bo tròn góc viền</td></tr>
+      <tr><td>Viết tắt</td><td><code>border: 5px solid red;</code> (width style color)</td></tr>
+    </table>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:22px;">Margin vs Padding — khi nào dùng gì?</h4>
+    <div class="grid2">
+      <div class="info-card">
+        <h4>Margin</h4>
+        <p>Tạo khoảng cách <b>bên ngoài</b> phần tử — dùng để tạo khoảng cách giữa các phần tử/khối với nhau. <code>margin: auto</code> giúp căn giữa phần tử theo chiều ngang (khi đã có width cố định).</p>
+      </div>
+      <div class="info-card">
+        <h4>Padding</h4>
+        <p>Tạo khoảng cách <b>bên trong</b> phần tử, giữa content và border. Hay dùng với các phần tử có background để nội dung không dính sát viền.</p>
+      </div>
+    </div>
+    <div class="pill-row">
+      <span class="pill">⚠️ Hiện tượng "thu hẹp lề" (margin collapsing): lề dưới của phần tử 1 và lề trên của phần tử 2 chồng lên nhau → chỉ lấy giá trị lớn hơn, không cộng dồn</span>
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:22px;">Outline (khác với border!)</h4>
+    <p style="color:var(--ink-soft); font-size:.9rem;">Là đường viền vẽ <b>xung quanh border</b>, dùng làm phần tử nổi bật — <b>không phải</b> 1 phần kích thước của phần tử (không cộng vào tổng width/height).</p>
+    <table class="spec">
+      <tr><td><code>outline-style</code></td><td>Kiểu dáng (giống border)</td></tr>
+      <tr><td><code>outline-width</code></td><td><code>thin</code>, <code>medium</code>, <code>thick</code> hoặc px</td></tr>
+      <tr><td><code>outline-color</code></td><td>Màu viền ngoài</td></tr>
+      <tr><td><code>outline-offset</code></td><td>Khoảng trắng giữa border và outline</td></tr>
+    </table>
+  </div>
+
+  <!-- 5. LAYOUT -->
+  <div class="topic c-pink" id="layout">
+    <div class="topic-head">
+      <div class="topic-num">5</div>
+      <div>
+        <h3>Layout — Float, Flexbox, Grid &amp; Position</h3>
+        <div class="sub">3 cách xây dựng bố cục web, cộng với thuộc tính định vị vị trí</div>
+      </div>
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif;">2 loại layout</h4>
+    <div class="pill-row">
+      <span class="pill">🏗️ Page layout — bố cục chung (header, navbar, content, footer)</span>
+      <span class="pill">🧩 Component layout — bố cục chi tiết cho từng thành phần</span>
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:22px;">1️⃣ Float</h4>
+    <p style="color:var(--ink-soft); font-size:.9rem;">Chỉ định phần tử "nổi" sang trái hoặc phải, bị đưa ra khỏi luồng bình thường của tài liệu — các phần tử theo sau sẽ chạy lên bên cạnh nó.</p>
+    <pre class="code">.box { float: left; }
+<span class="c-com">/* Vấn đề Collapsing: phần tử cha không "nhìn thấy" chiều cao con float
+   → khắc phục bằng clear:both hoặc kỹ thuật clearfix */</span>
+.clearfix::after { content:""; display:block; clear:both; }</pre>
+    <div class="pill-row"><span class="pill">⚠️ clear chỉ có tác dụng trên phần tử block, không hoạt động trên inline</span></div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:24px;">2️⃣ Flexbox (bố cục 1 chiều)</h4>
+    <div class="grid2">
+      <div class="info-card">
+        <h4>Thuộc tính cho flex-container</h4>
+        <ul>
+          <li><code>display: flex</code> — bật chế độ flex</li>
+          <li><code>flex-direction</code> — hướng trục chính (row/column)</li>
+          <li><code>justify-content</code> — căn theo trục chính</li>
+          <li><code>align-items</code> — căn theo trục chéo (vuông góc)</li>
+          <li><code>flex-wrap</code> — cho phép xuống dòng khi thiếu chỗ</li>
+          <li><code>gap</code> — khoảng cách giữa items (không phải margin)</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>Thuộc tính cho flex-item</h4>
+        <ul>
+          <li><code>flex-grow</code> — mức độ giãn nở so với item khác</li>
+          <li><code>flex-shrink</code> — mức độ co lại</li>
+          <li><code>flex-basis</code> — độ dài khởi điểm</li>
+          <li><code>flex</code> — viết tắt của basis + grow + shrink</li>
+          <li><code>order</code> — đổi thứ tự hiển thị mà không đổi code gốc</li>
+          <li><code>align-self</code> — ghi đè align-items cho riêng item đó</li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="spec">
+      <tr><th>justify-content</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>flex-start</code> (mặc định)</td><td>Các item dồn về đầu container</td></tr>
+      <tr><td><code>flex-end</code></td><td>Dồn về cuối container</td></tr>
+      <tr><td><code>center</code></td><td>Dồn vào giữa</td></tr>
+      <tr><td><code>space-between</code></td><td>Khoảng cách đều ở giữa các item</td></tr>
+      <tr><td><code>space-around</code></td><td>Khoảng cách đều trước/giữa/sau mỗi item</td></tr>
+      <tr><td><code>space-evenly</code></td><td>Khoảng cách hoàn toàn bằng nhau ở mọi vị trí</td></tr>
+    </table>
+
+    <div class="example-box">
+      <b>Ví dụ dễ hiểu:</b> flexbox giống việc xếp ghế trong 1 hàng — <code>justify-content</code> quyết định cả hàng ghế dồn về đâu (trái/phải/giữa/dàn đều), còn <code>align-items</code> quyết định các ghế cao thấp khác nhau được căn theo mép nào (trên/dưới/giữa).
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:24px;">3️⃣ Grid (bố cục 2 chiều)</h4>
+    <p style="color:var(--ink-soft); font-size:.9rem;">Grid-line theo 2 trục chia container thành các ô (grid-cell). Khoảng cách giữa các cell gọi là Gutters (xác định bởi <code>gap</code>).</p>
+    <pre class="code">.container {
+  display: grid;
+  grid-template-columns: repeat(<span class="c-num">4</span>, 1fr);
+  gap: <span class="c-num">16px</span>;
+}
+.item {
+  grid-column: <span class="c-num">1</span> / <span class="c-num">3</span>;   <span class="c-com">/* chiếm từ line 1 đến line 3 = 2 cột */</span>
+  grid-row: <span class="c-num">2</span> / <span class="c-num">3</span>;
+}</pre>
+    <table class="spec">
+      <tr><th>Giá trị đơn vị</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>fr</code></td><td>Đơn vị riêng của Grid — 1 phần của không gian có sẵn</td></tr>
+      <tr><td><code>auto</code></td><td>Tự động theo nội dung</td></tr>
+      <tr><td><code>%</code></td><td>Theo phần trăm chiều rộng container</td></tr>
+      <tr><td><code>repeat(auto-fill, minmax(60px,1fr))</code></td><td>Tự động chèn nhiều cột/hàng nhất có thể tuỳ kích thước container</td></tr>
+    </table>
+    <div class="pill-row">
+      <span class="pill">💡 auto-fit khác auto-fill: khi container lớn hơn tổng item, auto-fit sẽ co gọn & kéo dài item để lấp đầy container</span>
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:24px;">CSS Position — căn chỉnh vị trí</h4>
+    <table class="spec">
+      <tr><th>Giá trị</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>static</code></td><td>Mặc định — theo luồng tài liệu thông thường</td></tr>
+      <tr><td><code>relative</code></td><td>Định vị tương đối so với vị trí ban đầu của chính nó</td></tr>
+      <tr><td><code>absolute</code></td><td>Định vị tương đối so với phần tử cha gần nhất được định vị (không di chuyển khi cuộn màn hình)</td></tr>
+      <tr><td><code>fixed</code></td><td>Định vị tương đối so với khung nhìn — cố định so với cửa sổ trình duyệt, không di chuyển khi cuộn</td></tr>
+      <tr><td><code>sticky</code></td><td>Chuyển đổi giữa relative và fixed tuỳ theo vị trí cuộn — "dính" vào 1 vị trí khi cuộn đến đó</td></tr>
+    </table>
+    <div class="pill-row">
+      <span class="pill">💡 top/bottom/left/right dùng để định vị chính xác vị trí cuối cùng khi kết hợp với position</span>
+    </div>
+  </div>
+
+  <!-- 6. TYPOGRAPHY -->
+  <div class="topic c-blue" id="typo">
+    <div class="topic-head">
+      <div class="topic-num">6</div>
+      <div>
+        <h3>Typography &amp; Hiệu ứng</h3>
+        <div class="sub">Font chữ, đơn vị đo, pseudo-elements, navbar và transition</div>
+      </div>
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif;">Đơn vị đo trong CSS</h4>
+    <table class="spec">
+      <tr><th>Đơn vị</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>px</code></td><td>Pixel — kích thước cố định, không tự điều chỉnh theo màn hình</td></tr>
+      <tr><td><code>em</code></td><td>Phụ thuộc kích thước phần tử cha (1em = font-size của cha)</td></tr>
+      <tr><td><code>rem</code></td><td>Phụ thuộc kích thước gốc <code>&lt;html&gt;</code> — mặc định 1rem = 16px</td></tr>
+      <tr><td><code>vw</code></td><td>% theo chiều rộng khung nhìn — 1vw = 1% chiều rộng màn hình</td></tr>
+    </table>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:22px;">Thuộc tính Font</h4>
+    <table class="spec">
+      <tr><th>Thuộc tính</th><th>Giá trị</th></tr>
+      <tr><td><code>font-family</code></td><td>Phông chữ: Arial, Verdana, Times New Roman, Georgia...</td></tr>
+      <tr><td><code>font-size</code></td><td>Kích thước chữ (px/em/rem)</td></tr>
+      <tr><td><code>font-weight</code></td><td><code>normal</code>, <code>bold</code>, hoặc 100-900 (400 = thường, 700 = đậm)</td></tr>
+      <tr><td><code>font-style</code></td><td><code>normal</code>, <code>italic</code>, <code>oblique</code></td></tr>
+      <tr><td>Viết tắt</td><td><code>font: ...</code> — gộp các thuộc tính trên</td></tr>
+    </table>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:22px;">Thuộc tính Text</h4>
+    <div class="grid2">
+      <div class="info-card">
+        <h4>Căn chỉnh &amp; khoảng cách</h4>
+        <ul>
+          <li><code>text-align</code> — left/right/center/justify</li>
+          <li><code>line-height</code> — chiều cao dòng</li>
+          <li><code>letter-spacing</code> / <code>word-spacing</code></li>
+          <li><code>text-indent</code> — thụt lề dòng đầu</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h4>Trang trí &amp; biến đổi</h4>
+        <ul>
+          <li><code>text-decoration</code> — underline/overline/line-through/none</li>
+          <li><code>text-transform</code> — uppercase/lowercase/capitalize</li>
+          <li><code>text-shadow</code> — đổ bóng chữ</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <b>Ví dụ dễ hiểu:</b> muốn bỏ gạch chân mặc định của link <code>&lt;a&gt;</code>, dùng <code>text-decoration: none;</code> — đây là mẹo cực hay dùng khi biến link thành nút bấm.
+    </div>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:24px;">Pseudo-elements (phần tử ảo)</h4>
+    <p style="color:var(--ink-soft); font-size:.9rem;">CSS cho phép "vẽ thêm" nội dung hiển thị mà không cần viết thêm thẻ HTML — bắt buộc phải có thuộc tính <code>content</code> (dù để trống) thì mới hiển thị.</p>
+    <table class="spec">
+      <tr><th>Pseudo-element</th><th>Ý nghĩa</th></tr>
+      <tr><td><code>::before</code> / <code>::after</code></td><td>Chèn nội dung ngay trước/sau nội dung thật của phần tử</td></tr>
+      <tr><td><code>::marker</code></td><td>Đại diện dấu đầu dòng của &lt;li&gt;</td></tr>
+      <tr><td><code>::placeholder</code></td><td>Chữ gợi ý mờ trong input</td></tr>
+      <tr><td><code>::selection</code></td><td>Phần văn bản đang được bôi đen bằng chuột</td></tr>
+      <tr><td><code>::first-line</code> / <code>::first-letter</code></td><td>Định dạng riêng dòng đầu / chữ cái đầu của văn bản</td></tr>
+    </table>
+
+    <pre class="code">.box::after {
+  content: <span class="c-str">""</span>;
+  display: block;
+  clear: both;
+}</pre>
+
+    <h4 style="font-family:'Baloo 2',sans-serif; margin-top:24px;">CSS Navigation Bar &amp; hiệu ứng</h4>
+    <div class="grid2">
+      <div class="info-card">
+        <h4>Thanh điều hướng</h4>
+        <p>Xây từ <code>&lt;ul&gt;&lt;li&gt;</code> — bỏ margin/padding/list-style mặc định. Thanh ngang thường dùng <code>display: flex</code> trên &lt;ul&gt;; thanh cố định dùng <code>position: sticky</code> hoặc <code>fixed</code>.</p>
+      </div>
+      <div class="info-card">
+        <h4>Transition &amp; Opacity</h4>
+        <p><code>transition: width .4s ease-in-out;</code> tạo hiệu ứng chuyển động mượt khi 1 thuộc tính thay đổi (ví dụ ô tìm kiếm mở rộng khi focus). <code>opacity</code> nhận giá trị 0.0 → 1.0, giá trị càng thấp càng trong suốt.</p>
+      </div>
+    </div>
+
+    <pre class="code">input[type=text] {
+  width: <span class="c-num">30%</span>;
+  transition: width <span class="c-num">0.4s</span> ease-in-out;
+}
+input[type=text]:focus {
+  width: <span class="c-num">100%</span>;
+}</pre>
+
+    <div class="pill-row">
+      <span class="pill">🔎 [attribute] — chọn phần tử có thuộc tính đó, vd a[target]</span>
+      <span class="pill">🔎 [attribute="value"] — giá trị khớp chính xác</span>
+      <span class="pill">🔎 [attribute*="value"] — chứa 1 chuỗi cụ thể</span>
+      <span class="pill">🔎 [attribute^="value"] — bắt đầu bằng giá trị</span>
+    </div>
+  </div>
+
+</section>
+
+<footer>
+  <div class="foot-card">
+    <h3>🎯 Ôn lại nhanh trước khi ngủ</h3>
+    <p>HTML dựng khung xương cho trang &middot; CSS "mặc quần áo" cho khung xương đó &middot; Box Model là quy tắc đo kích thước mọi phần tử &middot; Flexbox/Grid là công cụ sắp xếp bố cục &middot; Specificity quyết định ai thắng khi có nhiều rule cùng áp dụng. Quay lại bản đồ tư duy bất cứ khi nào cần ôn nhanh — hoặc bấm nút bên dưới để chuyển bài học!</p>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
+      <a href="js-landing-page.html" class="switch-btn" style="display:inline-flex; background:rgba(44,42,58,.85);">🟨 Bài JavaScript <span class="arrow">→</span></a>
+      <a href="upweb-landing-page.html" class="switch-btn" style="display:inline-flex; background:rgba(44,42,58,.85);">🟪 Bài Up Web <span class="arrow">→</span></a>
+    </div>
+  </div>
+</footer>
+
+<a href="#top" class="back-top" id="backTop">↑</a>
+
+<script>
+  const backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    backTop.classList.toggle('show', window.scrollY > 500);
+  });
+
+  const links = document.querySelectorAll('.nav-links a');
+  const topics = document.querySelectorAll('.topic, #mindmap');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const id = entry.target.id;
+        links.forEach(l => {
+          const active = l.getAttribute('href') === '#' + id;
+          l.style.background = active ? '#2c2a3a' : '';
+          l.style.color = active ? '#fff' : '';
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+  topics.forEach(t => obs.observe(t));
+</script>
+
+</body>
+</html>
